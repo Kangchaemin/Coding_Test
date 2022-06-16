@@ -1,0 +1,75 @@
+<pre>
+package BinarySearch;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class 공유기 {
+
+    public static void main(String args[]) {
+
+        //최대 거리를 구하는거니까 거리를 좁혀가면서 공유기 개수를 구하면 된다.
+
+
+
+        //BufferedReader를 사용해서도 풀어봐야하는데
+//        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+//
+//        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+//
+//        int N = Integer.parseInt(st.nextToken());
+//        int C = Integer.parseInt(st.nextToken());
+
+
+        Scanner input = new Scanner(System.in);
+
+        int N = input.nextInt();
+        int C = input.nextInt();
+
+        //1. 일단 해당 줄을 다 리스트로 받자.
+        ArrayList<Integer> list = new ArrayList<>();
+
+        for(int i = 0; i < N; i++)
+            list.add(input.nextInt());
+
+        //2. 이진탐색이니까 sort를 해야해.
+        Collections.sort(list);
+
+//        int start = list.get(0);
+//        int end = list.get(N - 1);
+        //start와 end는 공유기 사이의 gap을 말하는거다!!
+        int start = 1;
+        int end = list.get(N - 1) - list.get(0);
+        int result = 0; // 정답 담을배열
+
+        while(start <= end) {
+
+            int mid = (start + end) / 2;
+            int value = list.get(0);
+            int count = 1;
+
+            for(int i = 1; i < N; i++) {
+
+                if(list.get(i) >= mid + value) {
+                    value = list.get(i);
+                    count++;
+                }
+            }
+            
+            //한바퀴 다 돌고나서 count가 몇개인지 파악하기
+            if(count >= C) {
+                start = mid + 1;
+                result = mid; // 최적의 결과 저장
+            }
+            
+            else
+                end = mid - 1;
+        }
+
+        System.out.println(result);
+
+
+    }
+}
+</pre>
