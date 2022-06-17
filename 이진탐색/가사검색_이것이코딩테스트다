@@ -1,0 +1,107 @@
+package BinarySearch;
+
+import java.lang.reflect.Array;
+import java.util.*;
+
+public class 가사검색 {
+
+    public static void main(String args[]) {
+
+        Scanner input = new Scanner(System.in);
+
+        String words[] = {"frodo", "front", "frost", "frozen", "frame", "kakao"};
+        String queries[] = {"fro??", "????o", "fr???", "fro???", "pro?"};
+
+        int result[] = new int[queries.length];
+
+        //1. 일단 list를 만들어야겠다.
+        ArrayList<ArrayList<String>> arr = new ArrayList<>();
+        ArrayList<ArrayList<String>> reversearr = new ArrayList<>();
+
+        //단어들의 길이가 10,000개 이하라고 했으니까
+        for(int i =0; i < 10001; i++) {
+            arr.add(new ArrayList<String>());
+            reversearr.add(new ArrayList<String>());
+        }
+
+        for(int i = 0; i < words.length; i++) {
+
+            String word = words[i];
+            arr.get(word.length()).add(word);
+            //뒤집어서도 넣어야지.
+            word = (new StringBuffer(word)).reverse().toString();
+            reversearr.get(word.length()).add(word);
+        }
+
+        //길이별로 다 sort를 해줘야한다.
+        for(int i = 0; i < 10001; i++) {
+            Collections.sort(arr.get(i));
+            Collections.sort(reversearr.get(i));
+        }
+
+//        System.out.println(arr.get(5));
+
+        //쿼리별로 확인한다!
+        for(int i = 0; i < queries.length; i++) {
+
+            String q = queries[i];
+            int res = 0;
+
+            if(q.charAt(0) != '?') {
+                res = countByRange(arr.get(q.length()), q.replaceAll("\\?", "a"), q.replaceAll("\\?", "z"));
+            }
+
+            else {
+                q = (new StringBuffer(q)).reverse().toString();
+                res = countByRange(reversearr.get(q.length()), q.replaceAll("\\?", "a"), q.replaceAll("\\?", "z"));
+            }
+
+            result[i] = res;
+        }
+
+        System.out.println(Arrays.toString(result));
+
+    }
+
+    public static int countByRange(ArrayList<String> arr, String leftValue, String rightValue) {
+
+        int rightIndex = upperBound(arr, rightValue, 0, arr.size());
+        int leftIndex = lowerBound(arr, leftValue, 0, arr.size());
+
+        return rightIndex - leftIndex;
+    }
+
+    public static int lowerBound(ArrayList<String> arr, String target, int start, int end) {
+
+        while(start < end) {
+
+            int mid = (start + end) / 2;
+
+            //arr[mid]값이 target보다 사전순으로 같거나 뒤에있다면
+            if(arr.get(mid).compareTo(target) >= 0)
+                end = mid;
+
+            else
+                start = mid + 1;
+        }
+
+
+        return end;
+    }
+
+    public static int upperBound(ArrayList<String> arr, String target, int start, int end) {
+
+        while(start < end) {
+
+            int mid = (start + end) / 2;
+
+            //arr[mid]값이 target보다 사전순으로 뒤라면
+            if(arr.get(mid).compareTo(target) > 0)
+                end = mid;
+
+            else
+                start = mid + 1;
+        }
+        return end;
+    }
+}
