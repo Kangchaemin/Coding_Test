@@ -1,0 +1,54 @@
+package BinarySearch;
+
+import java.util.*;
+
+public class 부품찾기 {
+
+    public static void main(String args[]) {
+
+        Scanner input = new Scanner(System.in);
+
+        int N = input.nextInt();
+        int arrN [] = new int[N];
+
+        for(int n = 0; n < N; n++)
+            arrN[n] = input.nextInt();
+
+        int M = input.nextInt();
+        int arrM[] = new int[M];
+
+        for(int m = 0; m < M; m++)
+            arrM[m] = input.nextInt();
+
+        //1. 일단 arrN을 sort해야한다.
+        Arrays.sort(arrN);
+
+        for(int i = 0; i < M; i++) {
+
+            int target = arrM[i];
+            int start = 0;
+            int end = N - 1;
+
+            System.out.println(binarySearch(arrN, 0, N - 1, target));
+        }
+    }
+
+    private static String binarySearch(int[] arr, int start, int end, int target) {
+
+        while(start <= end) {
+
+            int mid = (start + end) / 2;
+
+            if(arr[mid] == target)
+                return "yes";
+
+            else if(arr[mid] > target)
+                end = mid - 1;
+
+            else
+                start = mid + 1;
+        }
+
+        return "no";
+    }
+}
